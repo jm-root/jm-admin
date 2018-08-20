@@ -134,11 +134,12 @@ export default class BasicLayout extends React.PureComponent {
     let title = 'Ant Design Pro';
     let currRouterData = null;
     // match params path
-    Object.keys(routerData).forEach(key => {
+    for (const key in Object.keys(routerData)) {
       if (pathToRegexp(key).test(pathname)) {
         currRouterData = routerData[key];
+        break;
       }
-    });
+    }
     if (currRouterData && currRouterData.name) {
       title = `${currRouterData.name} - Ant Design Pro`;
     }

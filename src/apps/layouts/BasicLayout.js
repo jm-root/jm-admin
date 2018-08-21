@@ -10,12 +10,15 @@ import pathToRegexp from 'path-to-regexp';
 import { enquireScreen, unenquireScreen } from 'enquire-js';
 import GlobalHeader from '../../components/GlobalHeader';
 import GlobalFooter from '../../components/GlobalFooter';
-import SiderMenu from '../../components/SiderMenu';
+import SiderMenu from '../components/SiderMenu';
 import NotFound from '../Exception/404';
 import { getRoutes } from '../../utils/utils';
 import Authorized from '../../utils/Authorized';
 import { getMenuData } from '../../common/menu';
 import logo from '../../assets/logo.svg';
+import config from '../config';
+
+const title = config.title || 'Admin';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute, check } = Authorized;
@@ -131,7 +134,6 @@ export default class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
     let currRouterData = null;
     // match params path
     for (const key in routerData) {
@@ -141,7 +143,7 @@ export default class BasicLayout extends React.PureComponent {
       }
     }
     if (currRouterData && currRouterData.name) {
-      title = `${currRouterData.name} - Ant Design Pro`;
+      return `${currRouterData.name} - ${title}`;
     }
     return title;
   }
@@ -221,6 +223,7 @@ export default class BasicLayout extends React.PureComponent {
     const layout = (
       <Layout>
         <SiderMenu
+          title={title}
           logo={logo}
           // 不带Authorized参数的情况下如果没有权限,会强制跳到403界面
           // If you do not have the Authorized parameter
@@ -268,29 +271,31 @@ export default class BasicLayout extends React.PureComponent {
           </Content>
           <Footer style={{ padding: 0 }}>
             <GlobalFooter
-              links={[
-                {
-                  key: 'Pro 首页',
-                  title: 'Pro 首页',
-                  href: 'http://pro.ant.design',
-                  blankTarget: true,
-                },
-                {
-                  key: 'github',
-                  title: <Icon type="github" />,
-                  href: 'https://github.com/ant-design/ant-design-pro',
-                  blankTarget: true,
-                },
-                {
-                  key: 'Ant Design',
-                  title: 'Ant Design',
-                  href: 'http://ant.design',
-                  blankTarget: true,
-                },
-              ]}
+              links={
+                [
+                  // {
+                  //   key: 'Pro 首页',
+                  //   title: 'Pro 首页',
+                  //   href: 'http://pro.ant.design',
+                  //   blankTarget: true,
+                  // },
+                  // {
+                  //   key: 'github',
+                  //   title: <Icon type="github"/>,
+                  //   href: 'https://github.com/ant-design/ant-design-pro',
+                  //   blankTarget: true,
+                  // },
+                  // {
+                  //   key: 'Ant Design',
+                  //   title: 'Ant Design',
+                  //   href: 'http://ant.design',
+                  //   blankTarget: true,
+                  // },
+                ]
+              }
               copyright={
                 <Fragment>
-                  Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+                  Copyright <Icon type="copyright" /> {config.copyright}
                 </Fragment>
               }
             />

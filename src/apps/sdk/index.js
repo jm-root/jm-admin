@@ -1,5 +1,5 @@
-const Sdk = require('jm-sdk');
-const config = require('../config');
+import Sdk from 'jm-sdk';
+import config from '../config';
 
 const sdk = new Sdk(config);
 const { logger } = sdk;
@@ -12,4 +12,4 @@ sdk.login = async () => {
 
 sdk.use(test, {});
 
-module.exports = sdk;
+export default sdk;

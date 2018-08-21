@@ -11,6 +11,8 @@ let config = {
 };
 
 const defaultConfig = {
+  title: 'Admin',
+  copyright: '2018',
   logLevel: 'debug',
   modules: {
     ms: {},
@@ -23,6 +25,5 @@ const defaultConfig = {
 const env = process.env.NODE_ENV || 'development';
 config = config[env] || config.development;
 config.env = env;
-config = Object.assign({}, defaultConfig, config);
 
-module.exports = config;
+export default Object.assign({}, defaultConfig, config);

@@ -6,7 +6,7 @@ import { Row, Col, Card, List, Avatar } from 'antd';
 
 import { Radar } from 'components/Charts';
 import EditableLinkGroup from 'components/EditableLinkGroup';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import PageHeaderLayout from '../layouts/PageHeaderLayout';
 
 import styles from './Workplace.less';
 
@@ -167,8 +167,7 @@ export default class Workplace extends PureComponent {
         <div className={styles.statItem}>
           <p>团队内排名</p>
           <p>
-            8
-            <span> / 24</span>
+            8<span> / 24</span>
           </p>
         </div>
         <div className={styles.statItem}>

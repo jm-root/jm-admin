@@ -2,7 +2,7 @@ import React from 'react';
 import { routerRedux, Route, Switch } from 'dva/router';
 import { LocaleProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
-import { getRouterData } from './common/router';
+import { getRouterData } from './apps/router';
 import Authorized from './utils/Authorized';
 import { getQueryPath } from './utils/utils';
 

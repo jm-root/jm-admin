@@ -14,7 +14,7 @@ import SiderMenu from '../components/SiderMenu';
 import NotFound from '../Exception/404';
 import { getRoutes } from '../../utils/utils';
 import Authorized from '../../utils/Authorized';
-import { getMenuData } from '../../common/menu';
+import { getMenuData } from '../router/menu';
 import logo from '../../assets/logo.svg';
 import config from '../config';
 

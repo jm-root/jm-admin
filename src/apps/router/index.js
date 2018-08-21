@@ -7,128 +7,128 @@ import { getMenuData } from './menu';
 const routerConfig = {
   '/': {
     models: ['user', 'login'],
-    component: import('../apps/layouts/BasicLayout'),
+    component: import('../layouts/BasicLayout'),
   },
   '/dashboard/analysis': {
     models: ['chart'],
-    component: import('../apps/Dashboard/Analysis'),
+    component: import('../Dashboard/Analysis'),
   },
   '/dashboard/monitor': {
     models: ['monitor'],
-    component: import('../apps/Dashboard/Monitor'),
+    component: import('../Dashboard/Monitor'),
   },
   '/dashboard/workplace': {
     models: ['project', 'activities', 'chart'],
-    component: import('../apps/Dashboard/Workplace'),
+    component: import('../Dashboard/Workplace'),
     // hideInBreadcrumb: true,
     // name: '工作台',
     // authority: 'admin',
   },
   '/form/basic-form': {
     models: ['form'],
-    component: import('../apps/Forms/BasicForm'),
+    component: import('../Forms/BasicForm'),
   },
   '/form/step-form': {
     models: ['form'],
-    component: import('../apps/Forms/StepForm'),
+    component: import('../Forms/StepForm'),
   },
   '/form/step-form/info': {
     name: '分步表单（填写转账信息）',
     models: ['form'],
-    component: import('../apps/Forms/StepForm/Step1'),
+    component: import('../Forms/StepForm/Step1'),
   },
   '/form/step-form/confirm': {
     name: '分步表单（确认转账信息）',
     models: ['form'],
-    component: import('../apps/Forms/StepForm/Step2'),
+    component: import('../Forms/StepForm/Step2'),
   },
   '/form/step-form/result': {
     name: '分步表单（完成）',
     models: ['form'],
-    component: import('../apps/Forms/StepForm/Step3'),
+    component: import('../Forms/StepForm/Step3'),
   },
   '/form/advanced-form': {
     models: ['form'],
-    component: import('../apps/Forms/AdvancedForm'),
+    component: import('../Forms/AdvancedForm'),
   },
   '/list/table-list': {
     models: ['rule'],
-    component: import('../apps/List/TableList'),
+    component: import('../List/TableList'),
   },
   '/list/basic-list': {
     models: ['list'],
-    component: import('../apps/List/BasicList'),
+    component: import('../List/BasicList'),
   },
   '/list/card-list': {
     models: ['list'],
-    component: import('../apps/List/CardList'),
+    component: import('../List/CardList'),
   },
   '/list/search': {
     models: ['list'],
-    component: import('../apps/List/List'),
+    component: import('../List/List'),
   },
   '/list/search/projects': {
     models: ['list'],
-    component: import('../apps/List/Projects'),
+    component: import('../List/Projects'),
   },
   '/list/search/applications': {
     models: ['list'],
-    component: import('../apps/List/Applications'),
+    component: import('../List/Applications'),
   },
   '/list/search/articles': {
     models: ['list'],
-    component: import('../apps/List/Articles'),
+    component: import('../List/Articles'),
   },
   '/profile/basic': {
     models: ['profile'],
-    component: import('../apps/Profile/BasicProfile'),
+    component: import('../Profile/BasicProfile'),
   },
   '/profile/advanced': {
     models: ['profile'],
-    component: import('../apps/Profile/AdvancedProfile'),
+    component: import('../Profile/AdvancedProfile'),
   },
   '/result/success': {
     models: [],
-    component: import('../apps/Result/Success'),
+    component: import('../Result/Success'),
   },
   '/result/fail': {
     models: [],
-    component: import('../apps/Result/Error'),
+    component: import('../Result/Error'),
   },
   '/exception/403': {
     models: [],
-    component: import('../apps/Exception/403'),
+    component: import('../Exception/403'),
   },
   '/exception/404': {
     models: [],
-    component: import('../apps/Exception/404'),
+    component: import('../Exception/404'),
   },
   '/exception/500': {
     models: [],
-    component: import('../apps/Exception/500'),
+    component: import('../Exception/500'),
   },
   '/exception/trigger': {
     models: ['error'],
-    component: import('../apps/Exception/triggerException'),
+    component: import('../Exception/triggerException'),
   },
   '/user': {
     models: [],
-    component: import('../apps/layouts/UserLayout'),
+    component: import('../layouts/UserLayout'),
   },
   '/user/login': {
     models: ['login'],
-    component: import('../apps/User/Login'),
+    component: import('../User/Login'),
   },
   '/user/register': {
     models: ['register'],
-    component: import('../apps/User/Register'),
+    component: import('../User/Register'),
   },
   '/user/register-result': {
     models: [],
-    component: import('../apps/User/RegisterResult'),
+    component: import('../User/RegisterResult'),
   },
   // '/user/:id': {
-  //   models: [], component: import('../apps/User/SomeComponent')
+  //   models: [], component: import('../User/SomeComponent')
   // },
 };
 
@@ -153,7 +153,7 @@ const dynamicWrapper = (app, models, component) => {
   models.forEach(model => {
     if (modelNotExisted(app, model)) {
       // eslint-disable-next-line
-      app.model(require(`../models/${model}`).default);
+      app.model(require(`../../models/${model}`).default);
     }
   });
 

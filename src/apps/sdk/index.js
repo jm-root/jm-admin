@@ -10,6 +10,4 @@ sdk.login = async () => {
   return doc;
 };
 
-sdk.use(test, {});
-
 export default sdk;

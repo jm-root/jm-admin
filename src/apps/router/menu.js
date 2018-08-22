@@ -2,6 +2,17 @@ import { isUrl } from '../../utils/utils';
 
 const menuData = [
   {
+    name: 'test',
+    icon: 'dashboard',
+    path: 'test',
+    children: [
+      {
+        name: 'test',
+        path: 'list',
+      },
+    ],
+  },
+  {
     name: 'dashboard',
     icon: 'dashboard',
     path: 'dashboard',

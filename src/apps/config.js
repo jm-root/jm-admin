@@ -1,12 +1,10 @@
 let config = {
-  localhost: {
-    api: 'http://localhost:3000',
-  },
   development: {
-    api: 'http://api.test.jamma.cn',
+    api: 'http://localhost:8000',
   },
   production: {
     api: 'http://api.jamma.cn',
+    noProxy: true,
   },
 };
 

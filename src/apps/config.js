@@ -1,10 +1,10 @@
 let config = {
   development: {
     api: 'http://localhost:8000',
+    logLevel: 'debug',
   },
   production: {
     api: 'http://api.jamma.cn',
-    noProxy: true,
   },
 };
 
@@ -13,7 +13,6 @@ const defaultConfig = {
   copyright: '2018',
   logLevel: 'debug',
   modules: {
-    ms: {},
     sso: {},
     passport: {},
     login: {},

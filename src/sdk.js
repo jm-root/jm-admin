@@ -1,6 +1,6 @@
 import Sdk from 'jm-sdk';
 import MS from 'jm-ms/dist/browser';
-import config from '../config';
+import config from './config';
 
 const ms = new MS();
 const sdk = new Sdk(config);

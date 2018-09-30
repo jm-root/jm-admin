@@ -1,10 +1,13 @@
 import fs from 'fs'
+import fse from 'fs-extra'
 import path from 'path'
 
+let locales = {}
 let routes = []
+
+// 合并 app 的route
 let dir = path.join(__dirname, '../src/pages')
-fs
-  .readdirSync(dir)
+fs.readdirSync(dir)
   .filter(function (file) {
     return fs.statSync(path.join(dir, file)).isDirectory() && file.indexOf('.') !== 0
   })
@@ -13,10 +16,30 @@ fs
     if (fs.existsSync(file)) {
       const config = require(file)
       routes.push(...config.routes)
+      if (config.locales) {
+        for (const key in config.locales) {
+          const value = config.locales[key]
+          locales[key] = {...locales[key], ...value}
+        }
+      }
     }
   })
 
-console.log(routes)
+// 合并来自 app 的locales，并更新 src/locales
+for (const key in locales) {
+  const value = locales[key]
+  const file = path.join(__dirname, `../src/locales/${key}.js`)
+  let s = fs.readFileSync(file)
+  s = s.toString()
+  s = s.replace('export default', 'module.exports = ')
+  const tmpFile = `${file}.tmp`
+  fse.outputFileSync(tmpFile, s)
+  let o = require(tmpFile)
+  o = {...o, ...value}
+  s = 'export default ' + JSON.stringify(o, null, 2)
+  fse.outputFileSync(file, s)
+  fse.removeSync(tmpFile)
+}
 
 const staticRoutes = [
   // dashboard
@@ -265,7 +288,7 @@ const staticRoutes = [
 
 routes.push(...staticRoutes)
 
-export default [
+routes = [
   // user
   {
     path: '/user',
@@ -283,6 +306,8 @@ export default [
     component: '../layouts/BasicLayout',
     Routes: ['src/pages/Authorized'],
     authority: ['admin', 'user'],
-    routes
+    routes,
   },
 ]
+
+export default routes

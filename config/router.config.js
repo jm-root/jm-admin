@@ -2,54 +2,80 @@ const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
 
-const dir = path.join(__dirname, '../src/pages');
-const locales = {};
-const routes = [];
+class Loader {
+  constructor() {
+    this.dir = path.join(__dirname, '../src/pages');
+    this.locales = {};
+    this.routes = [];
+    this.load();
+  }
 
-// 加载 app, 合并 routes 和 locales
-function loadApp(filePath) {
-  const file = path.join(dir, filePath, '/routes.json');
-  if (!fs.existsSync(file)) return;
-  routes.push(...fse.readJsonSync(file));
+  load() {
+    const { dir } = this;
+    fs.readdirSync(dir)
+      .filter(file => fs.statSync(path.join(dir, file)).isDirectory() && file.indexOf('.') !== 0)
+      .forEach(doc => {
+        this.loadApp(doc);
+      });
 
-  const localePath = path.join(dir, filePath, '/locales');
-  fs.readdirSync(localePath)
-    .filter(doc => fs.statSync(path.join(localePath, doc)).isFile() && doc.indexOf('.json') !== -1)
-    .forEach(doc => {
-      const key = path.basename(doc, '.json');
-      const value = fse.readJsonSync(path.join(localePath, doc));
-      locales[key] = { ...locales[key], ...value };
+    this.mergeLocales();
+  }
+
+  // 加载 app, 合并 routes
+  loadApp(filePath) {
+    const { dir } = this;
+    const file = path.join(dir, filePath, '/routes.json');
+    if (!fs.existsSync(file)) return;
+    this.routes.push(...fse.readJsonSync(file));
+    this.loadLocales(filePath);
+    this.copyMocks(filePath);
+  }
+
+  // 合并 locales
+  loadLocales(filePath) {
+    const { dir, locales } = this;
+    const localePath = path.join(dir, filePath, '/locales');
+    fs.readdirSync(localePath)
+      .filter(
+        doc => fs.statSync(path.join(localePath, doc)).isFile() && doc.indexOf('.json') !== -1
+      )
+      .forEach(doc => {
+        const key = path.basename(doc, '.json');
+        const value = fse.readJsonSync(path.join(localePath, doc));
+        locales[key] = { ...locales[key], ...value };
+      });
+  }
+
+  // 复制 mock
+  copyMocks(filePath) {
+    const { dir } = this;
+    const mockPath = path.join(dir, filePath, '/mock');
+    if (!fs.existsSync(mockPath)) return;
+    fse.copySync(mockPath, path.join(__dirname, '../mock'));
+  }
+
+  // 合并来自 app 的locales，并更新 src/locales
+  mergeLocales() {
+    const { locales } = this;
+    Object.keys(locales).forEach(key => {
+      const value = locales[key];
+      const file = path.join(__dirname, `../src/locales/${key}.js`);
+      let s = fs.readFileSync(file);
+      s = s.toString();
+      s = s.replace('export default', 'module.exports = ');
+      const tmpFile = `${file}.tmp`;
+      fse.outputFileSync(tmpFile, s);
+      /* eslint-disable */
+      let o = require(tmpFile);
+      o = { ...o, ...value };
+      s = `export default ${JSON.stringify(o, null, 2)}`;
+      fse.outputFileSync(file, s);
+      fse.removeSync(tmpFile);
     });
+  }
 }
 
-// 合并来自 app 的locales，并更新 src/locales
-function mergeLocales() {
-  Object.keys(locales).forEach(key => {
-    const value = locales[key];
-    const file = path.join(__dirname, `../src/locales/${key}.js`);
-    let s = fs.readFileSync(file);
-    s = s.toString();
-    s = s.replace('export default', 'module.exports = ');
-    const tmpFile = `${file}.tmp`;
-    fse.outputFileSync(tmpFile, s);
-    /* eslint-disable */
-    let o = require(tmpFile);
-    o = { ...o, ...value };
-    s = `export default ${JSON.stringify(o, null, 2)}`;
-    fse.outputFileSync(file, s);
-    fse.removeSync(tmpFile);
-  });
-}
-
-fs.readdirSync(dir)
-  .filter(file => fs.statSync(path.join(dir, file)).isDirectory() && file.indexOf('.') !== 0)
-  .forEach(doc => {
-    loadApp(doc);
-  });
-
-console.log(routes, locales);
-
-mergeLocales();
+const loader = new Loader();
 
 export default [
   // user
@@ -70,7 +96,7 @@ export default [
     Routes: ['src/pages/Authorized'],
     authority: ['admin', 'user'],
     routes: [
-      ...routes,
+      ...loader.routes,
       // dashboard
       { path: '/', redirect: '/dashboard/analysis' },
       {

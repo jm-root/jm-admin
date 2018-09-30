@@ -1,8 +1,8 @@
 export default {
-  namespace: 'test',
+  namespace: 'simple',
 
   state: {
-    list: ['test', '123'],
+    list: ['simple', '123'],
   },
 
   effects: {},

@@ -5,11 +5,10 @@ import { connect } from 'dva';
   test,
   loading: loading.models.test,
 }))
-export default class List extends Component {
+class List extends Component {
   render() {
-    const { test, loading } = this.props;
-
-    console.log(test.list);
     return <Fragment>123</Fragment>;
   }
 }
+
+export default List;

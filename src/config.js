@@ -1,10 +1,10 @@
 let config = {
   development: {
-    api: 'http://localhost:8000',
-    logLevel: 'debug',
+    api: 'http://localhost:8000/api',
+    log_level: 'debug',
   },
   production: {
-    api: 'http://api.jamma.cn',
+    api: 'https://api.jamma.cn',
   },
 };
 

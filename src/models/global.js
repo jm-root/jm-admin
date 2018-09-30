@@ -1,9 +1,11 @@
 import { queryNotices } from '@/services/api';
+import sdk from '@/services/sdk';
 
 export default {
   namespace: 'global',
 
   state: {
+    sdk,
     collapsed: false,
     notices: [],
   },

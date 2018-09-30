@@ -1,6 +1,7 @@
 import Sdk from 'jm-sdk';
 import MS from 'jm-ms/dist/browser';
-import config from './config';
+import umiRouter from 'umi/router';
+import config from '@/config';
 
 const ms = new MS();
 const sdk = new Sdk(config);
@@ -12,10 +13,17 @@ ms.client({ uri: config.api }).then(doc => {
 
 const { logger } = sdk;
 logger.level = config.logLevel || 'info';
-logger.info('config', config);
+logger.info('config:', config);
 sdk.login = async function() {
-  const doc = await this.passport.login('root', '123');
-  return doc;
+  return {};
 };
 
+sdk.on('error', (e, opts) => {
+  logger.debug('request:', opts);
+  logger.error(e);
+  if (e.data && e.data.err === 401) {
+    umiRouter.push('/user/login');
+  }
+  return null;
+});
 export default sdk;

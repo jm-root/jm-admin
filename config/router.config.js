@@ -1,45 +1,55 @@
-import fs from 'fs';
-import fse from 'fs-extra';
-import path from 'path';
+const fs = require('fs');
+const fse = require('fs-extra');
+const path = require('path');
 
+const dir = path.join(__dirname, '../src/pages');
 const locales = {};
 const routes = [];
 
-// 合并 app 的route
-const dir = path.join(__dirname, '../src/pages');
+// 加载 app, 合并 routes 和 locales
+function loadApp(filePath) {
+  const file = path.join(dir, filePath, '/routes.json');
+  if (!fs.existsSync(file)) return;
+  routes.push(...fse.readJsonSync(file));
+
+  const localePath = path.join(dir, filePath, '/locales');
+  fs.readdirSync(localePath)
+    .filter(doc => fs.statSync(path.join(localePath, doc)).isFile() && doc.indexOf('.json') !== -1)
+    .forEach(doc => {
+      const key = path.basename(doc, '.json');
+      const value = fse.readJsonSync(path.join(localePath, doc));
+      locales[key] = { ...locales[key], ...value };
+    });
+}
+
+// 合并来自 app 的locales，并更新 src/locales
+function mergeLocales() {
+  Object.keys(locales).forEach(key => {
+    const value = locales[key];
+    const file = path.join(__dirname, `../src/locales/${key}.js`);
+    let s = fs.readFileSync(file);
+    s = s.toString();
+    s = s.replace('export default', 'module.exports = ');
+    const tmpFile = `${file}.tmp`;
+    fse.outputFileSync(tmpFile, s);
+    /* eslint-disable */
+    let o = require(tmpFile);
+    o = { ...o, ...value };
+    s = `export default ${JSON.stringify(o, null, 2)}`;
+    fse.outputFileSync(file, s);
+    fse.removeSync(tmpFile);
+  });
+}
+
 fs.readdirSync(dir)
   .filter(file => fs.statSync(path.join(dir, file)).isDirectory() && file.indexOf('.') !== 0)
   .forEach(doc => {
-    const file = path.join(dir, doc, '/index.js');
-    if (fs.existsSync(file)) {
-      /* eslint-disable */
-      const config = require(file);
-      routes.push(...config.routes);
-      if (config.locales) {
-        Object.keys(config.locales).forEach(key => {
-          const value = config.locales[key];
-          locales[key] = { ...locales[key], ...value };
-        });
-      }
-    }
+    loadApp(doc);
   });
 
-// 合并来自 app 的locales，并更新 src/locales
-Object.keys(locales).forEach(key => {
-  const value = locales[key];
-  const file = path.join(__dirname, `../src/locales/${key}.js`);
-  let s = fs.readFileSync(file);
-  s = s.toString();
-  s = s.replace('export default', 'module.exports = ');
-  const tmpFile = `${file}.tmp`;
-  fse.outputFileSync(tmpFile, s);
-  /* eslint-disable */
-  let o = require(tmpFile);
-  o = { ...o, ...value };
-  s = `export default ${JSON.stringify(o, null, 2)}`;
-  fse.outputFileSync(file, s);
-  fse.removeSync(tmpFile);
-});
+console.log(routes, locales);
+
+mergeLocales();
 
 export default [
   // user

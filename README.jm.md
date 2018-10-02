@@ -1,6 +1,6 @@
-# jm-admin
+# jm-ant-design-pro
 
-实际工作中，我们经常把后台的功能被划分为各个独立的模块，根据需要组合使用，jm-admin 基于 [ant design pro](https://pro.ant.design/) 实现这一功能。
+实际工作中，我们经常把后台的功能被划分为各个独立的模块，根据需要组合使用，jm-ant-design-pro 基于 [ant design pro](https://pro.ant.design/) 实现这一功能。
 
 设计原则上尽量减少对于 ant design pro 的修改，这里说明主要的差异，方便跟随官方版本升级。
 

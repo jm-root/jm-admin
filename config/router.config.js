@@ -35,6 +35,7 @@ class Loader {
   loadLocales(filePath) {
     const { dir, locales } = this;
     const localePath = path.join(dir, filePath, '/locales');
+    if (!fs.existsSync(localePath)) return;
     fs.readdirSync(localePath)
       .filter(
         doc => fs.statSync(path.join(localePath, doc)).isFile() && doc.indexOf('.json') !== -1

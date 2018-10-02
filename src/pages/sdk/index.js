@@ -1,7 +1,7 @@
 import Sdk from 'jm-sdk';
 import MS from 'jm-ms/dist/browser';
 import umiRouter from 'umi/router';
-import config from '@/config';
+import config from './config';
 
 const ms = new MS();
 const sdk = new Sdk(config);
@@ -14,7 +14,7 @@ ms.client({ uri: config.api }).then(doc => {
 const { logger } = sdk;
 logger.level = config.logLevel || 'info';
 logger.info('config:', config);
-sdk.login = async function() {
+sdk.login = function() {
   return {};
 };
 

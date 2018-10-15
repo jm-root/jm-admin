@@ -83,6 +83,13 @@ src/pages/Dashboard/
 增加类 Loader, 实现动态加载 src/pages 文件夹下符合约定的应用 app
 
 ```
++const fs = require('fs');
+... 
+
++class Loader { ... }
+
++const loader = new Loader();
+
     routes: [
 +      ...loader.routes,
 ```

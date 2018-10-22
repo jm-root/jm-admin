@@ -1,7 +1,7 @@
 // https://umijs.org/config/
 import os from 'os';
 import pageRoutes from './router.config';
-import webpackplugin from './plugin.config';
+import webpackPlugin from './plugin.config';
 import defaultSettings from '../src/defaultSettings';
 
 export default {
@@ -15,7 +15,7 @@ export default {
           hmr: true,
         },
         targets: {
-          ie: 9,
+          ie: 11,
         },
         locale: {
           enable: true, // default false
@@ -40,6 +40,7 @@ export default {
       'umi-plugin-ga',
       {
         code: 'UA-72788897-6',
+        judge: () => process.env.APP_TYPE === 'site',
       },
     ],
   ],
@@ -108,7 +109,7 @@ export default {
     ],
   },
 
-  chainWebpack: webpackplugin,
+  chainWebpack: webpackPlugin,
   cssnano: {
     mergeRules: false,
   },
